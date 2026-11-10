@@ -298,6 +298,9 @@ export const qk = {
   initiativeOptions: (projectKey: string, params: Record<string, unknown>) =>
     ['initiatives', projectKey, 'options', params] as const,
   initiativeCounts: (projectKey: string) => ['initiativeCounts', projectKey] as const,
+  // Command-palette initiative search; a null projectId searches every project.
+  initiativeSearch: (q: string, projectId: number | null) =>
+    ['initiativeSearch', q, projectId] as const,
   initiative: (id: number) => ['initiative', id] as const,
   initiativeFeed: (id: number) => ['initiativeFeed', id] as const,
   // Prefix keys: issue mutations invalidate every initiative query without

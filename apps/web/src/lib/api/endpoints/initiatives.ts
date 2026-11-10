@@ -37,6 +37,15 @@ export interface InitiativeOption {
   status: InitiativeStatus;
 }
 
+// An initiative found by the command palette, with the project it belongs to.
+export interface InitiativeSearchHit {
+  id: number;
+  title: string;
+  projectId: number;
+  projectRef: string;
+  projectKey: string;
+}
+
 // Columns the initiative list can be sorted by, server-side. progress and health
 // are derived and not sortable.
 export const INITIATIVE_SORTS = ['title', 'priority', 'targetDate', 'owner'] as const;
@@ -127,6 +136,13 @@ export const listInitiativeOptions = (
   return request<InitiativeOption[]>(
     `/projects/${projectKey}/initiatives/options${qs ? `?${qs}` : ''}`,
   );
+};
+
+// Title search in every project the user can read initiatives in, or in projectId only.
+export const searchInitiatives = (params: { q: string; projectId?: number }) => {
+  const q = new URLSearchParams({ q: params.q });
+  if (params.projectId) q.set('projectId', String(params.projectId));
+  return request<InitiativeSearchHit[]>(`/initiatives/search?${q.toString()}`);
 };
 
 export const initiativeCounts = (projectKey: string) =>
